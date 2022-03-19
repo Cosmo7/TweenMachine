@@ -32,7 +32,7 @@ var endPosition = new Vector3(0, 0, 100);
 var tween = TweenMaker.Create(this);
 tween.duration = 0.75f;
 tween.easing = Easing.Quadratic;
-tween.type = EasingType.easeInOut;
+tween.easingType = EasingType.easeInOut;
 
 // create the update callback
 tween.onUpdate += (t) =>
