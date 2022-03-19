@@ -14,7 +14,7 @@ It's as simple as it possibly can be.
 * Nice selection of easings
 
 ## Limitations
-TweenMaker is a MonoBehavior that adds itself to a GameObject; you can't use TweenMaker without a GameObject.
+TweenMaker is a MonoBehaviour that adds itself to a GameObject; you can't use TweenMaker without a GameObject.
 
 # Typical use
 
