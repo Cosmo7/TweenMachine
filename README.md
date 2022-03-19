@@ -1,18 +1,17 @@
 # TweenMaker
-A minimal, function-oriented tween utility for Unity
+A minimal, function-oriented tween[^1] utility for Unity
 
-## Tweening
-Tweening is an animation process that interpolates values between two frame states. This interpolation can be linear or use a non-linear formula known as easing.
+[^1]:Tweening is an animation process that interpolates values between two frame states. This interpolation can be linear or use a non-linear formula known as easing.
 
 ## What makes TweenMaker different?
-TweenMaker is different from other tweening libraries because all of the actual logic for tweens is external. TweenMaker uses two callbacks, ```onUpdate``` and ```onComplete```; all of your tweened logic goes in there. There's no long API of move and fade and rotate calls, just the two callback functions. It's as simple as it possibly can be.
+TweenMaker is different from other tweening libraries because all of the actual logic for tweens is external. TweenMaker uses two callbacks, ```onUpdate``` and ```onComplete```; all of your tweened logic goes in there. There's no long API of move and fade and rotate calls, just the two callback functions. 
+
+It's as simple as it possibly can be.
 
 ## Features
-TweenMaker has the following features:
 * Single file
 * Function-oriented interface
-* Multiple easings
-* Easing direction is separate from easing type
+* Nice selection of easings
 
 ## Limitations
 TweenMaker is a MonoBehavior that adds itself to a GameObject; you can't use TweenMaker without a GameObject.
@@ -31,8 +30,6 @@ var endPosition = new Vector3(0, 0, 100);
 
 // make the tween
 var tween = TweenMaker.Create(this);
-
-// set the tween's behavior
 tween.duration = 0.75f;
 tween.easing = Easing.Quadratic;
 tween.type = EasingType.easeInOut;
@@ -50,3 +47,4 @@ tween.onComplete += () =>
 	Debug.Log("Tween complete!);
 };
 ```
+The tween starts running as soon as it is created.
