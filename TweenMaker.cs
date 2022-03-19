@@ -1,4 +1,21 @@
-﻿using UnityEngine;
+﻿// The MIT License (MIT)
+// Copyright © 2022 Cosmo7/Eddie Bowen
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
+// files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy,
+// modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+// Software.
+
+// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+using UnityEngine;
 
 
 namespace Cosmo7
@@ -16,10 +33,9 @@ namespace Cosmo7
 		public System.Action<float> onUpdate;       // called every update with a value between 0.0 and 1.0
 		public System.Action onComplete;            // called when tween is complete
 
-
-		//	*	each tween is attached to an existing GameObject and uses that object's Update phase
-		//	*	if that object is destroyed then no more updates will be called 
-		//	*	the tween destroys itself when it is complete
+		//	each tween is attached to an existing GameObject and uses that object's Update phase
+		//	if that object is destroyed then no more updates will be called 
+		//	the tween destroys itself when it is complete
 
 		// Constructors
 
