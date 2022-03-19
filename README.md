@@ -37,7 +37,8 @@ tween.type = EasingType.easeInOut;
 // create the update callback
 tween.onUpdate += (t) =>
 {
-	// t ranges from 0.0f to 1.0f over the duration of the 
+	// t ranges from 0.0f to 1.0f over the duration of the tween
+	// use LerpUnclamped rather than Lerp because some easings (eg: Elastic) can return values outside 0.0..1.0
 	transform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, t);
 };
 
