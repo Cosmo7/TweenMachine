@@ -27,7 +27,7 @@ namespace Cosmo7
 		// public values
 		public float duration = 1.0f;               // duration is in seconds
 		public Easing easing = Easing.Linear;
-		public EasingType type = EasingType.easeIn;
+		public EasingType easingType = EasingType.easeIn;
 
 		// output actions
 		public System.Action<float> onUpdate;       // called every update with a value between 0.0 and 1.0
@@ -98,7 +98,7 @@ namespace Cosmo7
 			// only ease intermediate values
 			if (value == 0.0f || value == 1.0f) return value;
 
-			switch (type)
+			switch (easingType)
 			{
 				case EasingType.easeIn:
 					// apply formula directly

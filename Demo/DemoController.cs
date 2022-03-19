@@ -14,7 +14,7 @@ public class DemoController : MonoBehaviour
 	public Transform movingObject;
 
 	public Text feedback;
-	public Text easingSelectorLabel;
+	public Text easingLabel;
 	public Text easingTypeLabel;
 	public Text durationLabel;
 	public Slider durationSlider;
@@ -32,7 +32,7 @@ public class DemoController : MonoBehaviour
 		var tween = TweenMaker.Create(this);
 		tween.duration = duration;
 		tween.easing = easing;
-		tween.type = easingType;
+		tween.easingType = easingType;
 
 		// the tween rotates and translates the object
 		var startPosition = new Vector3(-2.0f, 1.0f, 0.0f);
@@ -95,7 +95,7 @@ public class DemoController : MonoBehaviour
 
 	private void UpdateLabels()
 	{
-		easingSelectorLabel.text = string.Format("Easing: {0}", easing);
+		easingLabel.text = string.Format("Easing: {0}", easing);
 		easingTypeLabel.text = string.Format("EasingType: {0}", easingType);
 	}
 
