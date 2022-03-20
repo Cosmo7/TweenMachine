@@ -54,7 +54,7 @@ namespace Cosmo7
 
 		public void Update()
 		{
-			// returns true if still running
+			// compare elapsed time to duration
 			var elapsed = Time.unscaledTime - startTime;
 
 			if (elapsed >= duration)
