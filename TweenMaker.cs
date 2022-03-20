@@ -125,6 +125,8 @@ namespace Cosmo7
 
 		private float EasedValue(float p)
 		{
+			// adapted from https://easings.net/
+
 			switch (easing)
 			{
 				default:
@@ -144,7 +146,7 @@ namespace Cosmo7
 					return Mathf.Pow(p, 5);
 
 				case Easing.Sine:
-					return Mathf.Sin((p - 1.0f) * Mathf.PI) + 1.0f;
+					return 1.0f - Mathf.Cos((p * Mathf.PI) / 2.0f);
 
 				case Easing.Circular:
 					return 1.0f - Mathf.Sqrt(1.0f - (p * p));
