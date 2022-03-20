@@ -95,9 +95,6 @@ namespace Cosmo7
 
 		private float Ease(float value)
 		{
-			// only ease intermediate values
-			if (value == 0.0f || value == 1.0f) return value;
-
 			switch (easingType)
 			{
 				case EasingType.easeIn:
@@ -119,7 +116,6 @@ namespace Cosmo7
 					{
 						return 1.0f - (EasedValue((1.0f - value) * 2.0f) / 2.0f);
 					}
-
 			}
 		}
 
