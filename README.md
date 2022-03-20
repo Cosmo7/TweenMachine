@@ -14,7 +14,7 @@ It's as simple as it possibly can be.
 ## Limitations
 TweenMaker is a MonoBehaviour that adds itself to a GameObject; you can't use TweenMaker without a GameObject.
 
-# Typical use
+## Typical use
 
 Add the using:
 ```
@@ -46,4 +46,23 @@ tween.onComplete += () =>
 	Debug.Log("Tween complete!);
 };
 ```
-The tween starts running as soon as it is created, and destroys itself after calling onComplete.
+The tween component is added and immediately starts running, and destroys itself after calling onComplete.
+
+## Easing Options
+TweenMaker offers the following types of easing, as described at https://easings.net/
+* Linear
+* Quadratic
+* Cubic
+* Quartic
+* Quintic
+* Sine
+* Circular
+* Exponential
+* Elastic
+* Back
+* Bounce
+
+These easings can be applied as
+* In
+* Out
+* In-Out
