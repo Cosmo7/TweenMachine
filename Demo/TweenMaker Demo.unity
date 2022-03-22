@@ -1099,10 +1099,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 363908892}
-  gameObject1: {fileID: 949013680}
-  image2: {fileID: 329596686}
-  gameObject3: {fileID: 1947483067}
-  gameObject4: {fileID: 699549567}
+  target1: {fileID: 949013675}
+  target2: {fileID: 329596686}
+  target3: {fileID: 1947483066}
+  target4: {fileID: 699549566}
 --- !u!1 &843157316
 GameObject:
   m_ObjectHideFlags: 0

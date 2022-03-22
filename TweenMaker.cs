@@ -23,7 +23,7 @@ namespace Cosmo7
 	public class TweenMaker : MonoBehaviour
 	{
 		private float startTime;					// tweens are tracked by comparing startTime to Time.unscaledTime
-		private float duration;                     // in seconds
+		private float duration;						// in seconds
 		private float delay = 0.0f;					// in seconds											
 		private EasingDirection easingDirection;
 
@@ -38,9 +38,9 @@ namespace Cosmo7
 		//		* if that object is destroyed then no more updates will be called 
 		//		* the tween destroys itself when it is complete
 
-		public static TweenMaker Create(Component component, float duration = 1.0f, Easing easing = Easing.Linear, EasingDirection easingDirection = EasingDirection.easeOut)
+		public static TweenMaker Create(GameObject owner, float duration = 1.0f, Easing easing = Easing.Linear, EasingDirection easingDirection = EasingDirection.easeOut)
 		{
-			var tween = component.gameObject.AddComponent<TweenMaker>();
+			var tween = owner.AddComponent<TweenMaker>();
 			tween.startTime = Time.unscaledTime;
 			tween.duration = duration;
 			tween.easingFunction = GetEasingFunction(easing);
