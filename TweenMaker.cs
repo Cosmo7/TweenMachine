@@ -14,7 +14,7 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
+using System;
 using UnityEngine;
 
 
@@ -22,34 +22,76 @@ namespace Cosmo7
 {
 	public class TweenMaker : MonoBehaviour
 	{
-		private float startTime;                    // tweens are tracked by comparing startTime to Time.unscaledTime
+		private float startTime;					// tweens are tracked by comparing startTime to Time.unscaledTime
+		private float duration;                     // duration is in seconds											
+		private EasingDirection easingDirection;
 
-		// public values
-		public float duration = 1.0f;               // duration is in seconds
-		public Easing easing = Easing.Linear;
-		public EasingType easingType = EasingType.easeIn;
+		public Func<float, float> easingFunction;
 
-		// output actions
-		public System.Action<float> onUpdate;       // called every update with a value between 0.0 and 1.0
-		public System.Action onComplete;            // called when tween is complete
+		//	output actions
+		public Action<float> onUpdate;				// called every update with a value between 0.0 and 1.0
+		public Action onComplete;					// called when tween is complete
 
-		//	each tween is attached to an existing GameObject and uses that object's Update phase
-		//	if that object is destroyed then no more updates will be called 
-		//	the tween destroys itself when it is complete
+		//	Static constructor
+		//		* each tween is attached to an existing GameObject and uses that object's Update phase
+		//		* if that object is destroyed then no more updates will be called 
+		//		* the tween destroys itself when it is complete
 
-		// Constructors
-
-		public static TweenMaker Create(GameObject owner)
+		public static TweenMaker Create(Component component, float duration = 1.0f, Easing easing = Easing.Linear, EasingDirection easingDirection = EasingDirection.easeOut)
 		{
-			var tween = owner.AddComponent<TweenMaker>();
+			var tween = component.gameObject.AddComponent<TweenMaker>();
 			tween.startTime = Time.unscaledTime;
+			tween.duration = duration;
+			tween.easingFunction = GetEasingFunction(easing);
+			tween.easingDirection = easingDirection;
+
 			return tween;
 		}
 
-		public static TweenMaker Create(Component component)
+		private static Func<float, float> GetEasingFunction(Easing easing)
 		{
-			// convenience function
-			return Create(component.gameObject);
+			// adapted from https://easings.net/
+
+			switch (easing)
+			{
+				default:
+				case Easing.Linear:
+					return (p) => { return p; };
+
+				case Easing.Quadratic:
+					return (p) => { return Mathf.Pow(p, 2); };
+
+				case Easing.Cubic:
+					return (p) => { return Mathf.Pow(p, 3); };
+
+				case Easing.Quartic:
+					return (p) => { return Mathf.Pow(p, 4); };
+
+				case Easing.Quintic:
+					return (p) => { return Mathf.Pow(p, 5); };
+
+				case Easing.Sine:
+					return (p) => { return 1.0f - Mathf.Cos((p * Mathf.PI) / 2.0f); };
+
+				case Easing.Circular:
+					return (p) => { return 1.0f - Mathf.Sqrt(1.0f - (p * p)); };
+
+				case Easing.Exponential:
+					return (p) => { return Mathf.Pow(2.0f, 10.0f * (p - 1.0f)); };
+
+				case Easing.Back:
+					return (p) => { return Mathf.Pow(p, 3.0f) - (p * Mathf.Sin(p * Mathf.PI)); };
+
+				case Easing.Elastic:
+					return (p) => { return Mathf.Sin(6.5f * Mathf.PI * p) * Mathf.Pow(2.0f, 10.0f * (p - 1.0f)); };
+
+				case Easing.Bounce:
+					return (p) => { return Mathf.Abs(Mathf.Sin(6.5f * Mathf.PI * p) * Mathf.Pow(2.0f, 10.0f * (p - 1.0f))); };
+
+				case Easing.Custom:
+					// function will be supplied by user
+					return null;
+			}
 		}
 
 		public void Update()
@@ -73,6 +115,7 @@ namespace Cosmo7
 			}
 		}
 
+
 		// Invokers
 
 		private void InvokeUpdate(float ratio)
@@ -95,18 +138,18 @@ namespace Cosmo7
 
 		private float Ease(float value)
 		{
-			switch (easingType)
+			switch (easingDirection)
 			{
-				case EasingType.easeIn:
+				case EasingDirection.easeIn:
 					// apply formula directly
 					return EasedValue(value);
 
-				case EasingType.easeOut:
+				case EasingDirection.easeOut:
 					// apply formula backwards
 					return 1.0f - EasedValue(1.0f - value);
 
 				default:
-				case EasingType.easeInOut:
+				case EasingDirection.easeInOut:
 					// apply first half forwards and second half backwards
 					if (value < 0.5f)
 					{
@@ -121,44 +164,14 @@ namespace Cosmo7
 
 		private float EasedValue(float p)
 		{
-			// adapted from https://easings.net/
-
-			switch (easing)
+			if (easingFunction != null)
 			{
-				default:
-				case Easing.Linear:
-					return p;
-
-				case Easing.Quadratic:
-					return Mathf.Pow(p, 2);
-
-				case Easing.Cubic:
-					return Mathf.Pow(p, 3);
-
-				case Easing.Quartic:
-					return Mathf.Pow(p, 4);
-
-				case Easing.Quintic:
-					return Mathf.Pow(p, 5);
-
-				case Easing.Sine:
-					return 1.0f - Mathf.Cos((p * Mathf.PI) / 2.0f);
-
-				case Easing.Circular:
-					return 1.0f - Mathf.Sqrt(1.0f - (p * p));
-
-				case Easing.Exponential:
-					return Mathf.Pow(2.0f, 10.0f * (p - 1.0f));
-
-				case Easing.Back:
-					return Mathf.Pow(p, 3.0f) - (p * Mathf.Sin(p * Mathf.PI));
-
-				case Easing.Elastic:
-					return Mathf.Sin(6.5f * Mathf.PI * p) * Mathf.Pow(2.0f, 10.0f * (p - 1.0f));
-
-				case Easing.Bounce:
-					return Mathf.Abs(Mathf.Sin(6.5f * Mathf.PI * p) * Mathf.Pow(2.0f, 10.0f * (p - 1.0f)));
+				return easingFunction.Invoke(p);
 			}
+
+			// show a warning
+			Debug.LogWarning("TweenMaker custom function not set");
+			return p;
 		}
 	}
 
@@ -175,9 +188,10 @@ namespace Cosmo7
 		Elastic,
 		Back,
 		Bounce,
+		Custom,
 	}
 
-	public enum EasingType
+	public enum EasingDirection
 	{
 		easeIn,
 		easeOut,
