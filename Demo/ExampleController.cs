@@ -8,12 +8,31 @@ using Cosmo7;
 
 public class ExampleController : MonoBehaviour
 {
+	public new Transform camera;
+
 	public Transform gameObject1;
 	public Image image2;
 	public Transform gameObject3;
 	public Transform gameObject4;
 
-	
+
+	public void Start()
+	{
+		// do a little camera tween to show user we're running
+		var tween = TweenMaker.Create(this, 1.0f, Easing.Cubic, EasingDirection.easeOut);
+		
+		// delay the animation so the scene has a chance to load
+		tween.SetDelay(3.0f);
+
+		var startRotation = camera.rotation;
+		var endRotation = Quaternion.Euler(60.0f, 0.0f, 0.0f);
+
+		tween.onUpdate = (t) =>
+		{
+			camera.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
+		};
+	}
+
 	public void Example1()
 	{
 		// simple example that moves a GameObject from a to b
@@ -21,10 +40,9 @@ public class ExampleController : MonoBehaviour
 		var tween = TweenMaker.Create(this, 2.0f, Easing.Back, EasingDirection.easeInOut);
 
 		// set up a and b
-		var positionA = new Vector3(2.0f, 1.0f, -1.0f);
-		var positionB = new Vector3(-2.0f, 1.0f, -1.0f);
+		var positionA = new Vector3(-2.0f, 0.6f, 0.0f);
+		var positionB = new Vector3(1.0f, 0.6f, 0.0f);
 
-		// set up the update function
 		tween.onUpdate = (t) =>
 		{
 			gameObject1.localPosition = Vector3.LerpUnclamped(positionA, positionB, t);
@@ -81,8 +99,8 @@ public class ExampleController : MonoBehaviour
 			return Mathf.Sin(8.5f * Mathf.PI * p) * Mathf.Pow(3.0f, 15.0f * (p - 1.0f));
 		};
 
-		var startPosition = new Vector3(2.0f, 1.0f, 2.1f);
-		var endPosition = new Vector3(-1.0f, 1.0f, 2.1f);
+		var startPosition = new Vector3(-2.0f, 0.6f, 0.0f);
+		var endPosition = new Vector3(1.0f, 0.6f, 0.0f);
 		
 		tween.onUpdate += (t) =>
 		{

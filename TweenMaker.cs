@@ -23,7 +23,8 @@ namespace Cosmo7
 	public class TweenMaker : MonoBehaviour
 	{
 		private float startTime;					// tweens are tracked by comparing startTime to Time.unscaledTime
-		private float duration;                     // duration is in seconds											
+		private float duration;                     // in seconds
+		private float delay = 0.0f;					// in seconds											
 		private EasingDirection easingDirection;
 
 		public Func<float, float> easingFunction;
@@ -94,10 +95,15 @@ namespace Cosmo7
 			}
 		}
 
+		public void SetDelay(float delayInSeconds)
+		{
+			delay = delayInSeconds;
+		}
+
 		public void Update()
 		{
 			// compare elapsed time to duration
-			var elapsed = Time.unscaledTime - startTime;
+			var elapsed = Time.unscaledTime - startTime - delay;
 
 			if (elapsed >= duration)
 			{
@@ -108,7 +114,7 @@ namespace Cosmo7
 				// remove from owner
 				Destroy(this);
 			}
-			else
+			else if(elapsed > 0.0f)
 			{
 				// normal update
 				InvokeUpdate(Ease(elapsed / duration));
