@@ -8,7 +8,7 @@ using Cosmo7;
 
 public class ExampleController : MonoBehaviour
 {
-	public Transform camera;
+	public Transform mainCamera;
 
 	public GameObject target1;
 	public Image target2;
@@ -24,12 +24,12 @@ public class ExampleController : MonoBehaviour
 		// delay the animation so the scene has a chance to load
 		tween.SetDelay(3.0f);
 
-		var startRotation = camera.rotation;
+		var startRotation = mainCamera.rotation;
 		var endRotation = Quaternion.Euler(60.0f, 0.0f, 0.0f);
 
 		tween.onUpdate = (t) =>
 		{
-			camera.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
+			mainCamera.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
 		};
 	}
 
