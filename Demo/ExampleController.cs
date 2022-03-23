@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Cosmo7;
 
 
 public class ExampleController : MonoBehaviour
 {
-	public Transform camera;
+	public Transform mainCamera;
 
 	public GameObject target1;
 	public Image target2;
@@ -19,56 +16,76 @@ public class ExampleController : MonoBehaviour
 	public void Start()
 	{
 		// do a little camera tween to show user we're running
-		var tween = TweenMaker.Create(gameObject, 1.0f, Easing.Cubic, EasingDirection.easeOut);
+		var tween = TweenMaker.Create(gameObject);
+		tween.easing = Easing.Cubic; 
+		tween.easingDirection = EasingDirection.easeOut;
 		
 		// delay the animation so the scene has a chance to load
-		tween.SetDelay(3.0f);
+		tween.delay = 1.0f;
 
-		var startRotation = camera.rotation;
+		var startRotation = mainCamera.rotation;
 		var endRotation = Quaternion.Euler(60.0f, 0.0f, 0.0f);
 
 		tween.onUpdate = (t) =>
 		{
-			camera.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
+			mainCamera.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
 		};
 	}
 
 	public void Example1()
 	{
-		// simple example that moves a GameObject from a to b
+		// An example that moves a GameObject from one position to another
 
-		var tween = TweenMaker.Create(gameObject, 2.0f, Easing.Back, EasingDirection.easeInOut);
+		var tween = TweenMaker.Create(gameObject);
+		tween.duration = 2.0f;
+		tween.easing = Easing.Back;
+		tween.easingDirection = EasingDirection.easeInOut;
 
-		// set up a and b
-		var positionA = new Vector3(-2.0f, 0.6f, 0.0f);
-		var positionB = new Vector3(1.0f, 0.6f, 0.0f);
+		// set up start and end positions
+		var startX = -2.0f;
+		var endX = 1.0f;
 
 		tween.onUpdate = (t) =>
 		{
-			target1.transform.localPosition = Vector3.LerpUnclamped(positionA, positionB, t);
+			var x = Mathf.LerpUnclamped(startX, endX, t);
+			target1.transform.localPosition = new Vector3(x, 0.6f, 0.0f);
+		};
+
+		// setting an onComplete function is optional
+		tween.onComplete = () =>
+		{
+			Debug.Log("Help I'm being held prisoner in a tween factory!");
 		};
 	}
 
 	public void Example2()
 	{
-		// simple example that tweens an image color
+		// An example that tweens an image color, pingPongs, and loops
 
-		var tween = TweenMaker.Create(target2.gameObject, 3.0f, Easing.Cubic, EasingDirection.easeInOut);
+		var tween = TweenMaker.Create(target2.gameObject);
+		tween.duration = 3.0f;
+		tween.easing = Easing.Cubic;
+		tween.easingDirection = EasingDirection.easeInOut;
+		tween.pingPong = true;
+		tween.loop = true;
 
 		tween.onUpdate = (t) =>
 		{
-			target2.color = Color.LerpUnclamped(Color.red, Color.green, t);
+			target2.color = Color.LerpUnclamped(Color.white, Color.blue, t);
 		};
 	}
 
 	public void Example3()
 	{
-		// more complex example that uses onComplete to issue a second tween
+		// A complex example that chains a second tween
 
-		var tween = TweenMaker.Create(target3, 3.0f, Easing.Elastic, EasingDirection.easeOut);
+		var tween = TweenMaker.Create(target3);
+		tween.duration = 3.0f;
+		tween.easing = Easing.Elastic;
+		tween.easingDirection = EasingDirection.easeOut;
 
 		var startRotation = Quaternion.Euler(0, 0, 0);
-		var endRotation = Quaternion.Euler(45, 60 ,-20);
+		var endRotation = Quaternion.Euler(45, 60, -20);
 
 		tween.onUpdate = (t) =>
 		{
@@ -76,29 +93,31 @@ public class ExampleController : MonoBehaviour
 			target3.transform.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
 		};
 
-		tween.onComplete = () =>
-		{
-			// do another tween totating the object back to the start
-			var secondTween = TweenMaker.Create(target3, 0.5f, Easing.Elastic, EasingDirection.easeOut);
+		var secondTween = tween.CreateChain();
+		secondTween.duration = 0.5f;
+		secondTween.easing = Easing.Elastic;
+		secondTween.easingDirection = EasingDirection.easeOut;
 
-			secondTween.onUpdate = (t) =>
-			{
-				// rotate back from end to start
-				target3.transform.rotation = Quaternion.SlerpUnclamped(endRotation, startRotation, t);
-			};
+		secondTween.onUpdate = (t) =>
+		{
+			// rotate back from end to start
+			target3.transform.rotation = Quaternion.SlerpUnclamped(endRotation, startRotation, t);
 		};
 	}
 
 	public void Example4()
 	{
-		// more complex example that uses a custom easing function
+		// An example that uses a custom easing function
 
-		var tween = TweenMaker.Create(target4, 4.5f, Easing.Custom, EasingDirection.easeOut);
-
-		tween.easingFunction = (p) => {
-			return Mathf.Sin(8.5f * Mathf.PI * p) * Mathf.Pow(3.0f, 15.0f * (p - 1.0f));
-		};
-
+		var tween = TweenMaker.Create(target4);
+		tween.duration = 4.0f;
+		tween.easing = Easing.Custom;
+		tween.easingDirection = EasingDirection.easeOut;
+		
+		tween.SetCustomEasingFunction((p) => {
+			return Mathf.Abs(Mathf.Sin(p * Mathf.PI * 6.5f)) * p;
+		});
+		
 		var startPosition = new Vector3(-2.0f, 0.6f, 0.0f);
 		var endPosition = new Vector3(1.0f, 0.6f, 0.0f);
 		
@@ -109,9 +128,6 @@ public class ExampleController : MonoBehaviour
 
 			var rotation = Mathf.LerpUnclamped(0.0f, 60.0f, t);
 			target4.transform.rotation = Quaternion.Euler(-rotation, rotation, 0.0f);
-
-			// do something weird with scale to show it doesn't have to just be lerps everywhere
-			target4.transform.localScale = Vector3.one * (0.5f + (Mathf.Sin(t * Mathf.PI * 2.0f) * 0.25f));
 		};
 	}
 
