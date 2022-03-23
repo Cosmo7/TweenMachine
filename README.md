@@ -1,18 +1,22 @@
 # TweenMaker
-A minimal, function-oriented tween utility for Unity
+A minimal, action-based tween utility for Unity
 
-## What makes TweenMaker different?
-TweenMaker is different from other tweening libraries because all of the actual logic for tweens is external. TweenMaker uses two callbacks, ```onUpdate``` and ```onComplete```; all of your tweened logic goes in there. There's no long API of move and fade and rotate calls, just the two callback functions. 
+## What does action-based mean?
+With TweenMaker all tweening is done through an update action called ```onUpdate```. This action has a single parameter: an eased value that represents how complete the tween is. What you do with that value is up to you; it's perfect for feeding into Unity's Lerp and Slerp functions.
 
-It's as simple as it possibly can be.
+TweenMaker does *not* have functions to move, rotate, scale, fade, set colors, manage objects, fold laundry, etc. You do everything yourself, in the ```onUpdate``` and ```onComplete``` functions.
+
+This is better for you (because you don't have to trawl through documentation to find out how to do something), and it's better for me (because I don't have to write the documentation).
 
 ## Features
 * Single file
+* Open source, MIT license, on GitHub
 * Function-oriented interface
 * Nice selection of easings
+* Options to loop, ping-pong, and chain tweens
 
 ## Limitations
-TweenMaker is a MonoBehaviour that adds itself to a GameObject; you can't use TweenMaker without a GameObject.
+* TweenMaker is a Unity MonoBehaviour that belongs to a GameObject; you can't use TweenMaker without specifying a GameObject
 
 ## Typical use
 
@@ -30,13 +34,12 @@ var endPosition = new Vector3(0, 0, 100);
 var tween = TweenMaker.Create(this);
 tween.duration = 0.75f;
 tween.easing = Easing.Quadratic;
-tween.easingType = EasingType.easeInOut;
+tween.easingDirection = EasingType.easeInOut;
 
 // create the update callback
-tween.onUpdate += (t) =>
+tween.onUpdate = (t) =>
 {
 	// t ranges from 0.0f to 1.0f over the duration of the tween
-	// use LerpUnclamped rather than Lerp because some easings (eg: Elastic) can return values outside 0.0..1.0
 	transform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, t);
 };
 
@@ -46,7 +49,7 @@ tween.onComplete += () =>
 	Debug.Log("Tween complete!);
 };
 ```
-The tween component is added and immediately starts running, and destroys itself after calling onComplete.
+The tween component is added and immediately starts running, and destroys itself after calling ```onComplete```.
 
 ## Easing Options
 TweenMaker offers the following types of easing, as described at https://easings.net/
