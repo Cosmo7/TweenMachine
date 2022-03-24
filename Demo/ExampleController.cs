@@ -84,7 +84,7 @@ public class ExampleController : MonoBehaviour
 		tween.easing = Easing.Elastic;
 		tween.easingDirection = EasingDirection.easeOut;
 
-		var startRotation = Quaternion.Euler(0, 0, 0);
+		var startRotation = Quaternion.Euler(0, 180, 0);
 		var endRotation = Quaternion.Euler(45, 60, -20);
 
 		tween.onUpdate = (t) =>
@@ -126,7 +126,7 @@ public class ExampleController : MonoBehaviour
 			// move and rotate object
 			target4.transform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, t);
 
-			var rotation = Mathf.LerpUnclamped(0.0f, 60.0f, t);
+			var rotation = Mathf.LerpUnclamped(180.0f, 60.0f, t);
 			target4.transform.rotation = Quaternion.Euler(-rotation, rotation, 0.0f);
 		};
 	}
