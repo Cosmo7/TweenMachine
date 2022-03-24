@@ -16,9 +16,6 @@ This is better for you (because you don't have to trawl through documentation to
 * Nice selection of easings
 * Options to loop, ping-pong, and chain tweens
 
-## Limitations
-* TweenMaker is a Unity MonoBehaviour that belongs to a GameObject; you can't use TweenMaker without specifying a GameObject
-
 ## Typical use
 
 Add the using:
