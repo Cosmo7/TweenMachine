@@ -44,7 +44,7 @@ tween.onUpdate = (t) =>
 };
 
 // (optionally) create the completion callback
-tween.onComplete += () =>
+tween.onComplete = () =>
 {
 	Debug.Log("Tween complete!);
 };
