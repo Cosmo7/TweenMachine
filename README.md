@@ -25,14 +25,15 @@ using Cosmo7;
 
 Then, somewhere:
 ```
-var startPosition = transform.localPosition;
-var endPosition = new Vector3(0, 0, 100);
-
 // make the tween
 var tween = TweenMaker.Create(this);
 tween.duration = 0.75f;
 tween.easing = Easing.Quadratic;
 tween.easingDirection = EasingType.easeInOut;
+
+// define what the tween is doing
+var startPosition = transform.localPosition;
+var endPosition = new Vector3(0, 0, 100);
 
 // create the update callback
 tween.onUpdate = (t) =>
