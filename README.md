@@ -14,7 +14,7 @@ This is better for you (because you don't have to trawl through documentation to
 * Open source, MIT license, on GitHub
 * Function-oriented interface
 * Nice selection of easings
-* Options to loop, ping-pong, and chain tweens
+* Option to chain tweens
 
 ## Typical use
 
