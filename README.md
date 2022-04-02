@@ -20,13 +20,13 @@ This is better for you (because you don't have to trawl through documentation to
 
 Add the using:
 ```
-using Cosmo7;
+using TweenMachine;
 ```
 
 Then, somewhere:
 ```
 // make the tween
-var tween = TweenMachine.Create(this);
+var tween = Tween.Create(this);
 tween.duration = 0.75f;
 tween.easing = Easing.Quadratic;
 tween.easingDirection = EasingType.easeInOut;
