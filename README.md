@@ -26,7 +26,7 @@ using TweenMachine;
 Then, somewhere:
 ```
 // make the tween
-var tween = Tween.Create(this);
+var tween = transform.Tween(this);
 tween.duration = 0.75f;
 tween.easing = Easing.Quadratic;
 tween.easingDirection = EasingType.easeInOut;
@@ -40,12 +40,6 @@ tween.onUpdate = (t) =>
 {
 	// t ranges from 0.0f to 1.0f over the duration of the tween
 	transform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, t);
-};
-
-// (optionally) create the completion callback
-tween.onComplete = () =>
-{
-	Debug.Log("Tween complete!);
 };
 ```
 The tween component is added and immediately starts running, and destroys itself after calling ```onComplete```.
