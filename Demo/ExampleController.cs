@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Cosmo7;
+using TweenMachine;
 
 
 public class ExampleController : MonoBehaviour
@@ -16,7 +16,7 @@ public class ExampleController : MonoBehaviour
 	public void Start()
 	{
 		// do a little camera tween to show user we're running
-		var tween = TweenMaker.Create(gameObject);
+		var tween = mainCamera.Tween();
 		tween.easing = Easing.Cubic; 
 		tween.easingDirection = EasingDirection.easeOut;
 		
@@ -36,7 +36,7 @@ public class ExampleController : MonoBehaviour
 	{
 		// An example that moves a GameObject from one position to another
 
-		var tween = TweenMaker.Create(gameObject);
+		var tween = target1.Tween();
 		tween.duration = 2.0f;
 		tween.easing = Easing.Back;
 		tween.easingDirection = EasingDirection.easeInOut;
@@ -60,14 +60,12 @@ public class ExampleController : MonoBehaviour
 
 	public void Example2()
 	{
-		// An example that tweens an image color, pingPongs, and loops
+		// An example that tweens an image color
 
-		var tween = TweenMaker.Create(target2.gameObject);
+		var tween = target2.Tween();
 		tween.duration = 3.0f;
 		tween.easing = Easing.Cubic;
 		tween.easingDirection = EasingDirection.easeInOut;
-		tween.pingPong = true;
-		tween.loop = true;
 
 		tween.onUpdate = (t) =>
 		{
@@ -79,7 +77,7 @@ public class ExampleController : MonoBehaviour
 	{
 		// A complex example that chains a second tween
 
-		var tween = TweenMaker.Create(target3);
+		var tween = target3.Tween();
 		tween.duration = 3.0f;
 		tween.easing = Easing.Elastic;
 		tween.easingDirection = EasingDirection.easeOut;
@@ -93,7 +91,9 @@ public class ExampleController : MonoBehaviour
 			target3.transform.rotation = Quaternion.SlerpUnclamped(startRotation, endRotation, t);
 		};
 
-		var secondTween = tween.CreateChain();
+		var secondTween = target3.Tween();
+		tween.Chain(secondTween);
+
 		secondTween.duration = 0.5f;
 		secondTween.easing = Easing.Elastic;
 		secondTween.easingDirection = EasingDirection.easeOut;
@@ -109,24 +109,20 @@ public class ExampleController : MonoBehaviour
 	{
 		// An example that uses a custom easing function
 
-		var tween = TweenMaker.Create(target4);
+		var tween = target4.Tween();
 		tween.duration = 4.0f;
-		tween.easing = Easing.Custom;
-		tween.easingDirection = EasingDirection.easeOut;
-		
-		tween.SetCustomEasingFunction((p) => {
-			return Mathf.Abs(Mathf.Sin(p * Mathf.PI * 6.5f)) * p;
-		});
 		
 		var startPosition = new Vector3(-2.0f, 0.6f, 0.0f);
 		var endPosition = new Vector3(1.0f, 0.6f, 0.0f);
 		
 		tween.onUpdate += (t) =>
 		{
-			// move and rotate object
-			target4.transform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, t);
+			var easedValue = Mathf.Abs(Mathf.Sin(t * Mathf.PI * 6.5f)) * t;
 
-			var rotation = Mathf.LerpUnclamped(180.0f, 60.0f, t);
+			// move and rotate object
+			target4.transform.localPosition = Vector3.LerpUnclamped(startPosition, endPosition, easedValue);
+
+			var rotation = Mathf.LerpUnclamped(180.0f, 60.0f, easedValue);
 			target4.transform.rotation = Quaternion.Euler(-rotation, rotation, 0.0f);
 		};
 	}

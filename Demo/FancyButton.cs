@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Cosmo7;
+using TweenMachine;
 using UnityEngine.EventSystems;
 
 public class FancyButton : Button
@@ -11,15 +11,13 @@ public class FancyButton : Button
 	{
 		base.OnPointerClick(eventData);
 
-		var tween = TweenMaker.Create(gameObject);
+		var tween = gameObject.Tween();
 		tween.duration = 0.25f;
-		tween.easing = Easing.Sine;
-		tween.easingDirection = EasingDirection.easeIn;
-		tween.pingPong = true;
 
 		tween.onUpdate = (t) =>
 		{
-			transform.localScale = (1.0f + (t * 0.1f)) * Vector3.one;
+			var scale = (Mathf.Cos(t * Mathf.PI) + 1.0f) * 0.5f;
+			transform.localScale = Vector3.one * scale;
 		};
 	}
 }
