@@ -60,6 +60,11 @@ namespace TweenMachine
 		public float delay = 0.0f;
 
 		/// <summary>
+		/// Completeness of tween, not affected by easing
+		/// </summary>
+		public float ratio;
+
+		/// <summary>
 		/// Specify the easing function.
 		/// </summary>
 		public Easing easing = Easing.Linear;
@@ -132,7 +137,7 @@ namespace TweenMachine
 		{
 			// calculate the tweening ratio (ie: how complete the tween is)
 			var elapsed = Time.unscaledTime - startTime - delay;
-			var ratio = elapsed / duration;
+			ratio = elapsed / duration;
 
 			if (ratio >= 1.0f)
 			{
@@ -158,7 +163,8 @@ namespace TweenMachine
 		private void EndTween()
 		{
 			// do a final update to finish the animation neatly
-			InvokeUpdate(1.0f);
+			ratio = (easingDirection == EasingDirection.pulse ? 0.0f : 1.0f);
+			InvokeUpdate(ratio);
 
 			// if there are chained Tweens, start them
 			if (chained != null)
@@ -224,6 +230,17 @@ namespace TweenMachine
 					else
 					{
 						return 1.0f - (GetEasedValue((1.0f - value) * 2.0f, easing) / 2.0f);
+					}
+
+				case EasingDirection.pulse:
+					// first half is 0..1, second half is 1..0
+					if (value < 0.5f)
+					{
+						return GetEasedValue(value * 2.0f, easing);
+					}
+					else
+					{
+						return GetEasedValue((1.0f - value) * 2.0f, easing);
 					}
 			}
 		}
@@ -297,7 +314,7 @@ namespace TweenMachine
 		easeIn,
 		easeOut,
 		easeInOut,
-		// shakeItAllAbout,
+		pulse,
 	}
 
 }
