@@ -22,10 +22,10 @@ using UnityEngine;
 
 namespace TweenMachine
 {
-	
+
 	public static class UnityExtensions
 	{
-		
+
 		public static Tween Tween(this GameObject gameObject)
 		{
 			return gameObject.AddComponent<Tween>();
@@ -36,7 +36,6 @@ namespace TweenMachine
 			return component.gameObject.AddComponent<Tween>();
 		}
 	}
-
 
 	/// <summary>
 	/// A minimal, action-based tween utility for Unity.
@@ -124,7 +123,7 @@ namespace TweenMachine
 
 		#region internals
 
-		private float startTime;                    
+		private float startTime;
 		private List<Tween> chained;
 
 		private void Start()
@@ -145,7 +144,7 @@ namespace TweenMachine
 			}
 			else if (ratio > 0.0f)
 			{
-				if(started == false)
+				if (started == false)
 				{
 					started = true;
 					InvokeStart();
@@ -253,7 +252,7 @@ namespace TweenMachine
 			{
 				default:
 				case Easing.Linear:
-					return p; 
+					return p;
 
 				case Easing.Quadratic:
 					return Mathf.Pow(p, 2);
